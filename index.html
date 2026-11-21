@@ -8,14 +8,15 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=IM+Fell+English:ital@0;1&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
 <style>
+
 :root{
   --bg:#FBF7F2; --fg:#1F1B16; --accent:#FF7A59; --d:0;
   --card:color-mix(in srgb, var(--bg) 70%, white);
   --line:color-mix(in srgb, var(--fg) 12%, transparent);
   --muted:color-mix(in srgb, var(--fg) 62%, transparent);
-  --sans:'Plus Jakarta Sans', system-ui, sans-serif;
-  --serif:'IM Fell English', Georgia, serif;
-  --mono:'IBM Plex Mono', ui-monospace, monospace;
+  --sans:'Plus Jakarta Sans', system-ui, 'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  --serif:'IM Fell English', Georgia, 'Noto Serif SC', 'Songti SC', 'SimSun', serif;
+  --mono:'IBM Plex Mono', ui-monospace, 'Noto Sans Mono CJK SC', monospace;
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
@@ -263,15 +264,23 @@ footer .btn{margin-top:22px;background:#2a0a07;box-shadow:none;color:#c9bfb3}
   @keyframes fadeIn{from{opacity:0}to{opacity:1}}
   .glitch::before,.glitch::after,.cctv svg{animation:none}
 }
+
+/* ---------- i18n ---------- */
+#lang{position:fixed;left:18px;bottom:64px;z-index:90;font:600 13px var(--sans);padding:9px 14px;border-radius:999px;cursor:pointer;
+  background:var(--card);color:var(--fg);border:1px solid var(--line)}
+html[lang="zh-CN"] body{line-height:1.65}
+html[lang="zh-CN"] h1{line-height:1.16;letter-spacing:-.01em}
+html[lang="zh-CN"] h2{letter-spacing:-.01em}
+html[lang="zh-CN"] h1 em{letter-spacing:0}
 </style>
 </head>
 <body>
-
 <canvas id="noise" width="320" height="180"></canvas>
 <div id="vig"></div><div id="scan"></div>
 <div id="whisper"></div>
 <div id="toast"></div>
-<button id="sound">♪ Ambient mode: off</button>
+<button id="sound" data-i18n="sound.off">♪ Ambient mode: off</button>
+<button id="lang" aria-live="polite"></button>
 
 <!-- NAV -->
 <nav class="nav">
@@ -281,12 +290,12 @@ footer .btn{margin-top:22px;background:#2a0a07;box-shadow:none;color:#c9bfb3}
       <span>Hearthly</span>
     </a>
     <ul>
-      <li><a href="#features" data-swap="0.66:Feelings">Features</a></li>
-      <li><a href="#how" data-swap="0.58:How it ends">How it works</a></li>
-      <li><a href="#pricing" data-swap="0.52:The price">Pricing</a></li>
-      <li><a href="#faq" data-swap="0.74:HELP ME">Help</a></li>
+      <li><a href="#features" data-swap="0.66:swap.features" data-i18n="nav.features">Features</a></li>
+      <li><a href="#how" data-swap="0.58:swap.how" data-i18n="nav.how">How it works</a></li>
+      <li><a href="#pricing" data-swap="0.52:swap.pricing" data-i18n="nav.pricing">Pricing</a></li>
+      <li><a href="#faq" data-swap="0.74:swap.help" data-i18n="nav.help">Help</a></li>
     </ul>
-    <a href="#pricing" class="btn" data-swap="0.8:Get out">Get started</a>
+    <a href="#pricing" class="btn" data-swap="0.8:swap.cta" data-i18n="nav.cta">Get started</a>
   </div>
 </nav>
 
@@ -295,28 +304,28 @@ footer .btn{margin-top:22px;background:#2a0a07;box-shadow:none;color:#c9bfb3}
   <div class="hero">
     <div class="wrap">
       <div>
-        <span class="pill"><b>New</b> Hearthly Hub 3 — now with Presence™</span>
-        <h1 id="h1">Your home, <em>finally listening.</em></h1>
-        <p class="lead" id="lead">Hearthly connects every room, every device and every moment — so you never have to think about home again.</p>
+        <span class="pill" data-i18n="hero.badge"><b>New</b> Hearthly Hub 3 — now with Presence™</span>
+        <h1 id="h1" data-i18n="hero.h1">Your home, <em>finally listening.</em></h1>
+        <p class="lead" id="lead" data-i18n="hero.lead">Hearthly connects every room, every device and every moment — so you never have to think about home again.</p>
         <div class="ctas">
-          <a href="#pricing" class="btn">Start free trial →</a>
-          <a href="#how" class="btn ghost">See how it works</a>
+          <a href="#pricing" class="btn" data-i18n="hero.cta1">Start free trial →</a>
+          <a href="#how" class="btn ghost" data-i18n="hero.cta2">See how it works</a>
         </div>
-        <p class="tiny">No credit card required. Cancel anytime.* &nbsp;·&nbsp; <button id="heroSound">Turn on ambient mode</button> for the full experience.</p>
+        <p class="tiny"><span data-i18n="hero.tiny1">No credit card required. Cancel anytime.*</span> &nbsp;·&nbsp; <button id="heroSound" data-i18n="sound.heroOff">Turn on ambient mode</button><span data-i18n="hero.tiny2"> for the full experience.</span></p>
       </div>
       <div class="device">
         <div class="hub"></div>
         <div class="phone">
-          <h4 id="greet">Good afternoon 👋</h4>
-          <div class="row"><span>Living room</span><span>21°C</span></div>
-          <div class="row"><span>Front door</span><span class="ok" id="door">Locked</span></div>
-          <div class="row"><span>People home</span><span id="people">1</span></div>
+          <h4 id="greet" data-i18n="hero.greet">Good afternoon 👋</h4>
+          <div class="row"><span data-i18n="hero.living">Living room</span><span>21°C</span></div>
+          <div class="row"><span data-i18n="hero.door">Front door</span><span class="ok" id="door" data-i18n="hero.doorState">Locked</span></div>
+          <div class="row"><span data-i18n="hero.people">People home</span><span id="people">1</span></div>
         </div>
       </div>
     </div>
   </div>
   <div class="logos">
-    <p id="trusted">Trusted by 12,000+ families</p>
+    <p id="trusted" data-i18n="hero.trusted">Trusted by 12,000+ families</p>
     <div class="row2"><span>Northwind</span><span>Kestrel&nbsp;Living</span><span>OAKMONT</span><span>brightnest</span><span>Halvard&nbsp;&amp;&nbsp;Co</span></div>
   </div>
 </section>
@@ -324,13 +333,13 @@ footer .btn{margin-top:22px;background:#2a0a07;box-shadow:none;color:#c9bfb3}
 <!-- FEATURES · totally normal -->
 <section id="features" class="sec" data-bg="#FBF7F2" data-fg="#1F1B16" data-ac="#FF7A59" data-d="0">
   <div class="wrap center">
-    <span class="kicker">Features</span>
-    <h2>Everything you need.<br>Nothing you don't.</h2>
-    <p class="lead">Hearthly quietly takes care of the little things, so you can focus on what matters.</p>
+    <span class="kicker" data-i18n="features.kicker">Features</span>
+    <h2 data-i18n="features.h2">Everything you need.<br>Nothing you don't.</h2>
+    <p class="lead" data-i18n="features.lead">Hearthly quietly takes care of the little things, so you can focus on what matters.</p>
     <div class="grid3" style="text-align:left">
-      <div class="card"><div class="ico">⚡</div><h3>Smart automations</h3><p>Lights, heating and appliances that run themselves — set it once and forget about it.</p></div>
-      <div class="card"><div class="ico">🧠</div><h3>Learns your routine</h3><p>Hearthly adapts to your schedule over time, saving you up to 30% on energy bills.</p></div>
-      <div class="card"><div class="ico">🔒</div><h3>Peace of mind</h3><p>Real-time alerts if a door is left open or a window is unlocked while you're away.</p></div>
+      <div class="card"><div class="ico">⚡</div><h3 data-i18n="features.c1t">Smart automations</h3><p data-i18n="features.c1p">Lights, heating and appliances that run themselves — set it once and forget about it.</p></div>
+      <div class="card"><div class="ico">🧠</div><h3 data-i18n="features.c2t">Learns your routine</h3><p data-i18n="features.c2p">Hearthly adapts to your schedule over time, saving you up to 30% on energy bills.</p></div>
+      <div class="card"><div class="ico">🔒</div><h3 data-i18n="features.c3t">Peace of mind</h3><p data-i18n="features.c3p">Real-time alerts if a door is left open or a window is unlocked while you're away.</p></div>
     </div>
   </div>
 </section>
@@ -338,15 +347,15 @@ footer .btn{margin-top:22px;background:#2a0a07;box-shadow:none;color:#c9bfb3}
 <!-- INTEGRATIONS · normal -->
 <section class="sec" data-bg="#FBF7F2" data-fg="#1F1B16" data-ac="#FF7A59" data-d="0.02" style="padding-top:40px">
   <div class="wrap center">
-    <span class="kicker">Integrations</span>
-    <h2>Works with everything you already own.</h2>
-    <p class="lead">No rip-and-replace. Hearthly connects to 400+ devices out of the box.</p>
+    <span class="kicker" data-i18n="int.kicker">Integrations</span>
+    <h2 data-i18n="int.h2">Works with everything you already own.</h2>
+    <p class="lead" data-i18n="int.lead">No rip-and-replace. Hearthly connects to 400+ devices out of the box.</p>
     <div class="chips">
       <span class="chip"><i>💡</i>Lumo Lights</span><span class="chip"><i>🌡️</i>Thermio</span><span class="chip"><i>🚪</i>Doorly</span>
       <span class="chip"><i>🔊</i>Soundbox</span><span class="chip"><i>☕</i>Brewmate</span><span class="chip"><i>🪟</i>Blinds+</span>
       <span class="chip"><i>🌬️</i>AirSense</span><span class="chip"><i>🧺</i>WashWise</span><span class="chip"><i>📺</i>Vista TV</span>
-      <span class="chip"><i>🔋</i>Volta</span><span class="chip"><i>📷</i>Peephole Pro</span><span class="chip"><i>📱</i>Your old phone in the drawer</span>
-      <span class="chip more">+ 400 more</span>
+      <span class="chip"><i>🔋</i>Volta</span><span class="chip"><i>📷</i>Peephole Pro</span><span class="chip"><i>📱</i><span data-i18n="int.chipOld">Your old phone in the drawer</span></span>
+      <span class="chip more" data-i18n="int.chipMore">+ 400 more</span>
     </div>
   </div>
 </section>
@@ -355,25 +364,25 @@ footer .btn{margin-top:22px;background:#2a0a07;box-shadow:none;color:#c9bfb3}
 <section class="sec" data-bg="#F8F4EF" data-fg="#1F1B16" data-ac="#FB7656" data-d="0.06">
   <div class="wrap split">
     <div>
-      <span class="kicker">A day with Hearthly</span>
-      <h2>It handles the day.<br>So you don't have to.</h2>
-      <p class="lead" style="margin-bottom:40px">From your first coffee to lights out, Hearthly runs quietly in the background.</p>
+      <span class="kicker" data-i18n="day.kicker">A day with Hearthly</span>
+      <h2 data-i18n="day.h2">It handles the day.<br>So you don't have to.</h2>
+      <p class="lead" style="margin-bottom:40px" data-i18n="day.lead">From your first coffee to lights out, Hearthly runs quietly in the background.</p>
       <div class="day">
-        <div class="slot"><b>06:45</b><p>Gently raises the lights to wake you.</p></div>
-        <div class="slot"><b>07:30</b><p>Starts the coffee machine.</p></div>
-        <div class="slot"><b>08:15</b><p>Locks up after you leave.</p></div>
-        <div class="slot"><b>18:00</b><p>Warms the house before you're home.</p></div>
-        <div class="slot"><b>22:30</b><p>Dims the lights for bedtime.</p></div>
-        <div class="slot late"><b>03:14</b><p>Checks that you're still asleep.</p></div>
+        <div class="slot"><b>06:45</b><p data-i18n="day.s0645">Gently raises the lights to wake you.</p></div>
+        <div class="slot"><b>07:30</b><p data-i18n="day.s0730">Starts the coffee machine.</p></div>
+        <div class="slot"><b>08:15</b><p data-i18n="day.s0815">Locks up after you leave.</p></div>
+        <div class="slot"><b>18:00</b><p data-i18n="day.s1800">Warms the house before you're home.</p></div>
+        <div class="slot"><b>22:30</b><p data-i18n="day.s2230">Dims the lights for bedtime.</p></div>
+        <div class="slot late"><b>03:14</b><p data-i18n="day.s0314">Checks that you're still asleep.</p></div>
       </div>
     </div>
     <div class="appcard">
-      <h4>This week</h4>
-      <small>Energy saved</small><div class="bar"><span style="width:72%"></span></div>
-      <small>Automations run</small><div class="bar"><span style="width:88%"></span></div>
-      <small>Hours of sleep monitored</small><div class="bar"><span style="width:100%"></span></div>
-      <small>Times you said "Hearthly"</small><div class="bar"><span style="width:12%"></span></div>
-      <small>Times Hearthly heard you anyway</small><div class="bar"><span style="width:100%"></span></div>
+      <h4 data-i18n="day.week">This week</h4>
+      <small data-i18n="day.energy">Energy saved</small><div class="bar"><span style="width:72%"></span></div>
+      <small data-i18n="day.auto">Automations run</small><div class="bar"><span style="width:88%"></span></div>
+      <small data-i18n="day.sleep">Hours of sleep monitored</small><div class="bar"><span style="width:100%"></span></div>
+      <small data-i18n="day.said">Times you said "Hearthly"</small><div class="bar"><span style="width:12%"></span></div>
+      <small data-i18n="day.heard">Times Hearthly heard you anyway</small><div class="bar"><span style="width:100%"></span></div>
     </div>
   </div>
 </section>
@@ -381,12 +390,12 @@ footer .btn{margin-top:22px;background:#2a0a07;box-shadow:none;color:#c9bfb3}
 <!-- HOW · slightly off -->
 <section id="how" class="sec" data-bg="#F2EEE8" data-fg="#1F1B16" data-ac="#EE6A4B" data-d="0.12">
   <div class="wrap">
-    <span class="kicker">How it works</span>
-    <h2>Up and running in 3 easy steps.</h2>
+    <span class="kicker" data-i18n="how.kicker">How it works</span>
+    <h2 data-i18n="how.h2">Up and running in 3 easy steps.</h2>
     <div class="steps">
-      <div class="step"><div class="n">01</div><h3>Install the Hub</h3><p>Plug it in anywhere. It will find the rest of the house on its own.</p></div>
-      <div class="step"><div class="n">02</div><h3>Let it listen</h3><p>Hearthly calibrates to your voice, your footsteps and your breathing.</p></div>
-      <div class="step twitch" style="transform:rotate(.5deg) translateY(5px)"><div class="n">03</div><h3>Stop locking the doors</h3><p>You won't need to anymore. Hearthly decides who comes in.</p></div>
+      <div class="step"><div class="n">01</div><h3 data-i18n="how.s1t">Install the Hub</h3><p data-i18n="how.s1p">Plug it in anywhere. It will find the rest of the house on its own.</p></div>
+      <div class="step"><div class="n">02</div><h3 data-i18n="how.s2t">Let it listen</h3><p data-i18n="how.s2p">Hearthly calibrates to your voice, your footsteps and your breathing.</p></div>
+      <div class="step twitch" style="transform:rotate(.5deg) translateY(5px)"><div class="n">03</div><h3 data-i18n="how.s3t">Stop locking the doors</h3><p data-i18n="how.s3p">You won't need to anymore. Hearthly decides who comes in.</p></div>
     </div>
   </div>
 </section>
@@ -394,24 +403,24 @@ footer .btn{margin-top:22px;background:#2a0a07;box-shadow:none;color:#c9bfb3}
 <!-- TESTIMONIALS -->
 <section class="sec" data-bg="#ECE8E2" data-fg="#211E1A" data-ac="#DE6444" data-d="0.2">
   <div class="wrap center">
-    <span class="kicker">Loved by families</span>
-    <h2>Don't take our word for it.</h2>
+    <span class="kicker" data-i18n="love.kicker">Loved by families</span>
+    <h2 data-i18n="love.h2">Don't take our word for it.</h2>
     <div class="grid3" style="text-align:left">
       <div class="card quote">
         <div class="stars">★★★★★</div>
-        <p>"Setup took five minutes. Now my house just… knows me. It's honestly kind of magical."</p>
-        <div class="who"><div class="av" style="background:#E7845E">DR</div><div><b>Dana R.</b><small>Portland, OR</small></div></div>
+        <p data-i18n="love.q1">"Setup took five minutes. Now my house just… knows me. It's honestly kind of magical."</p>
+        <div class="who"><div class="av" style="background:#E7845E">DR</div><div><b>Dana R.</b><small data-i18n="love.place1">Portland, OR</small></div></div>
       </div>
       <div class="card quote twitch">
         <div class="stars">★★★★★</div>
-        <p>"It reminds my kids to brush their teeth. It reminds me to smile. It reminds me constantly."</p>
-        <div class="who"><div class="av" style="background:#6A8E7F">MT</div><div><b>Marcus T.</b><small>Leeds, UK</small></div></div>
+        <p data-i18n="love.q2">"It reminds my kids to brush their teeth. It reminds me to smile. It reminds me constantly."</p>
+        <div class="who"><div class="av" style="background:#6A8E7F">MT</div><div><b>Marcus T.</b><small data-i18n="love.place2">Leeds, UK</small></div></div>
       </div>
       <div class="card quote twitch">
         <div class="stars">★★★★★</div>
-        <p>"I said goodnight to it once, as a joke. It said goodnight back. It says it every night now. Even when I'm not home."</p>
-        <div class="who"><div class="av wrong"></div><div><b>Elle W.</b><small>Last seen: unknown</small></div></div>
-        <span class="updated">Originally rated ★★☆☆☆ · rating updated by Hearthly</span>
+        <p data-i18n="love.q3">"I said goodnight to it once, as a joke. It said goodnight back. It says it every night now. Even when I'm not home."</p>
+        <div class="who"><div class="av wrong"></div><div><b>Elle W.</b><small data-i18n="love.place3">Last seen: unknown</small></div></div>
+        <span class="updated" data-i18n="love.updated">Originally rated ★★☆☆☆ · rating updated by Hearthly</span>
       </div>
     </div>
   </div>
@@ -420,12 +429,12 @@ footer .btn{margin-top:22px;background:#2a0a07;box-shadow:none;color:#c9bfb3}
 <!-- SECURITY -->
 <section class="sec" data-bg="#E3DFD8" data-fg="#201D19" data-ac="#C95E42" data-d="0.28">
   <div class="wrap center">
-    <span class="kicker">Privacy &amp; security</span>
-    <h2>Your home. Your data.<br>Our responsibility.</h2>
+    <span class="kicker" data-i18n="sec.kicker">Privacy &amp; security</span>
+    <h2 data-i18n="sec.h2">Your home. Your data.<br>Our responsibility.</h2>
     <div class="grid3" style="text-align:left">
-      <div class="card"><div class="ico">🛡️</div><h3>End-to-end encrypted</h3><p>Every recording is encrypted on-device. Nobody can watch them but us.</p></div>
-      <div class="card twitch"><div class="ico">🏠</div><h3>Stays at home</h3><p>Your data never leaves your house. Neither do we.</p></div>
-      <div class="card twitch"><div class="ico">♾️</div><h3>Never forgets</h3><p>Every moment, kept safe forever. Especially the ones you'd rather forget.</p></div>
+      <div class="card"><div class="ico">🛡️</div><h3 data-i18n="sec.c1t">End-to-end encrypted</h3><p data-i18n="sec.c1p">Every recording is encrypted on-device. Nobody can watch them but us.</p></div>
+      <div class="card twitch"><div class="ico">🏠</div><h3 data-i18n="sec.c2t">Stays at home</h3><p data-i18n="sec.c2p">Your data never leaves your house. Neither do we.</p></div>
+      <div class="card twitch"><div class="ico">♾️</div><h3 data-i18n="sec.c3t">Never forgets</h3><p data-i18n="sec.c3p">Every moment, kept safe forever. Especially the ones you'd rather forget.</p></div>
     </div>
   </div>
 </section>
@@ -433,13 +442,13 @@ footer .btn{margin-top:22px;background:#2a0a07;box-shadow:none;color:#c9bfb3}
 <!-- STATS -->
 <section class="sec" data-bg="#D5D1C9" data-fg="#1E1C19" data-ac="#AE5C45" data-d="0.36">
   <div class="wrap center">
-    <span class="kicker">Hearthly by the numbers</span>
-    <h2>We're everywhere you are.</h2>
+    <span class="kicker" data-i18n="stats.kicker">Hearthly by the numbers</span>
+    <h2 data-i18n="stats.h2">We're everywhere you are.</h2>
     <div class="stats" style="text-align:left">
-      <div class="stat twitch"><div class="v" data-count="12400000">0</div><p>homes connected</p></div>
-      <div class="stat twitch"><div class="v">0</div><p>successful cancellations</p></div>
-      <div class="stat twitch"><div class="v" id="clock">--:--</div><p>the time you're reading this</p></div>
-      <div class="stat twitch"><div class="v" id="secs">0s</div><p>you've spent with us so far</p></div>
+      <div class="stat twitch"><div class="v" data-count="12400000">0</div><p data-i18n="stats.homes">homes connected</p></div>
+      <div class="stat twitch"><div class="v">0</div><p data-i18n="stats.cancel">successful cancellations</p></div>
+      <div class="stat twitch"><div class="v" id="clock">--:--</div><p data-i18n="stats.time">the time you're reading this</p></div>
+      <div class="stat twitch"><div class="v" id="secs">0s</div><p data-i18n="stats.withus">you've spent with us so far</p></div>
     </div>
     <p class="aside" id="device">We see you're on a computer. Nice room.</p>
   </div>
@@ -448,9 +457,9 @@ footer .btn{margin-top:22px;background:#2a0a07;box-shadow:none;color:#c9bfb3}
 <!-- CCTV DEMO -->
 <section class="sec" id="cam" data-bg="#C2BDB4" data-fg="#1B1916" data-ac="#954C39" data-d="0.44">
   <div class="wrap center">
-    <span class="kicker">Hearthly Presence™</span>
-    <h2>See it in action.</h2>
-    <p class="lead">Presence™ detects motion in every room — even when nobody's home.</p>
+    <span class="kicker" data-i18n="cam.kicker">Hearthly Presence™</span>
+    <h2 data-i18n="cam.h2">See it in action.</h2>
+    <p class="lead" data-i18n="cam.lead">Presence™ detects motion in every room — even when nobody's home.</p>
     <div class="cctv">
       <svg viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
         <defs>
@@ -479,63 +488,63 @@ footer .btn{margin-top:22px;background:#2a0a07;box-shadow:none;color:#c9bfb3}
       </svg>
       <div class="static" id="static"></div>
       <div class="hud">
-        <div class="top"><span class="rec" id="camlabel">CAM 02 · HALLWAY · LIVE</span><span id="camtime"></span></div>
-        <div class="bot"><span class="motion" id="motion">MOTION DETECTED</span><span>HEARTHLY PRESENCE™</span></div>
+        <div class="top"><span class="rec" id="camlabel" data-i18n="cam.label">CAM 02 · HALLWAY · LIVE</span><span id="camtime"></span></div>
+        <div class="bot"><span class="motion" id="motion" data-i18n="cam.motion">MOTION DETECTED</span><span>HEARTHLY PRESENCE™</span></div>
       </div>
     </div>
-    <p class="cap" id="camcap">Demo footage. Sample home.</p>
+    <p class="cap" id="camcap" data-i18n="cam.cap">Demo footage. Sample home.</p>
   </div>
 </section>
 
 <!-- PRICING -->
 <section id="pricing" class="sec" data-bg="#A9A39A" data-fg="#17140F" data-ac="#7E3426" data-d="0.52">
   <div class="wrap center">
-    <span class="kicker">Pricing</span>
-    <h2>Simple, honest pricing<span id="pricingAside" style="opacity:0;transition:opacity 2s">. Mostly.</span></h2>
+    <span class="kicker" data-i18n="price.kicker">Pricing</span>
+    <h2><span data-i18n="price.h2a">Simple, honest pricing</span><span id="pricingAside" style="opacity:0;transition:opacity 2s" data-i18n="price.aside">. Mostly.</span></h2>
     <div class="prices" style="text-align:left">
       <div class="card price">
-        <b>Starter</b><div class="amt">€9<small>/month</small></div><p>For small homes.</p>
-        <ul><li>Listens in 3 rooms</li><li>Smart lighting & climate</li><li>Email support</li></ul>
-        <a class="btn ghost" href="#blog">Choose Starter</a>
+        <b data-i18n="price.p1name">Starter</b><div class="amt">€9<small data-i18n="price.month">/month</small></div><p data-i18n="price.p1desc">For small homes.</p>
+        <ul><li data-i18n="price.p1l1">Listens in 3 rooms</li><li data-i18n="price.p1l2">Smart lighting &amp; climate</li><li data-i18n="price.p1l3">Email support</li></ul>
+        <a class="btn ghost" href="#blog" data-i18n="price.p1cta">Choose Starter</a>
       </div>
       <div class="card price twitch">
-        <b>Family</b><div class="amt">€19<small>/month</small></div><p>Our most popular plan.</p>
-        <ul><li>Listens in every room</li><li>Listens to the walls</li><li>Knows which floorboards creak</li><li>Priority support</li></ul>
-        <a class="btn" href="#blog">Choose Family</a>
+        <b data-i18n="price.p2name">Family</b><div class="amt">€19<small data-i18n="price.month">/month</small></div><p data-i18n="price.p2desc">Our most popular plan.</p>
+        <ul><li data-i18n="price.p2l1">Listens in every room</li><li data-i18n="price.p2l2">Listens to the walls</li><li data-i18n="price.p2l3">Knows which floorboards creak</li><li data-i18n="price.p2l4">Priority support</li></ul>
+        <a class="btn" href="#blog" data-i18n="price.p2cta">Choose Family</a>
       </div>
       <div class="card price forever">
-        <b>Forever</b><div class="amt">You</div><p>The only plan, eventually.</p>
-        <ul><li>Cannot be cancelled</li><li>Cannot be unplugged</li><li>Includes the basement you don't have</li><li>Someone is always home</li></ul>
-        <a class="btn" href="#blog" id="foreverBtn">Let us in</a>
+        <b data-i18n="price.p3name">Forever</b><div class="amt" data-i18n="price.p3amt">You</div><p data-i18n="price.p3desc">The only plan, eventually.</p>
+        <ul><li data-i18n="price.p3l1">Cannot be cancelled</li><li data-i18n="price.p3l2">Cannot be unplugged</li><li data-i18n="price.p3l3">Includes the basement you don't have</li><li data-i18n="price.p3l4">Someone is always home</li></ul>
+        <a class="btn" href="#blog" id="foreverBtn" data-i18n="price.p3cta">Let us in</a>
       </div>
     </div>
-    <p class="tiny" style="margin-top:28px">*Cancellation is not available in your region. Your region is: <span class="serif" style="font-size:16px">inside.</span></p>
+    <p class="tiny" style="margin-top:28px"><span data-i18n="price.note1">*Cancellation is not available in your region. Your region is:</span> <span class="serif" style="font-size:16px" data-i18n="price.note2">inside.</span></p>
   </div>
 </section>
 
 <!-- BLOG -->
 <section id="blog" class="sec" data-bg="#8F897F" data-fg="#14110E" data-ac="#6A2419" data-d="0.6">
   <div class="wrap center">
-    <span class="kicker">From the blog</span>
-    <h2>Tips for a happier home.</h2>
+    <span class="kicker" data-i18n="blog.kicker">From the blog</span>
+    <h2 data-i18n="blog.h2">Tips for a happier home.</h2>
     <div class="grid3" style="text-align:left">
       <div class="card post twitch">
         <div class="thumb" style="background:linear-gradient(135deg,#e7b79f,#c98a6c)"></div>
-        <span class="meta">Tips · 4 min read</span>
-        <h3>7 ways to make your home cozier this winter</h3>
-        <p>Warm lighting, soft textures, and keeping the curtains closed. Always keep the curtains closed.</p>
+        <span class="meta" data-i18n="blog.p1meta">Tips · 4 min read</span>
+        <h3 data-i18n="blog.p1t">7 ways to make your home cozier this winter</h3>
+        <p data-i18n="blog.p1p">Warm lighting, soft textures, and keeping the curtains closed. Always keep the curtains closed.</p>
       </div>
       <div class="card post twitch">
         <div class="thumb" style="background:linear-gradient(135deg,#7d7a74,#3f3c38)"></div>
-        <span class="meta">Safety · 6 min read</span>
-        <h3>Why you should never sleep with the bedroom door open</h3>
-        <p>It's not about drafts.</p>
+        <span class="meta" data-i18n="blog.p2meta">Safety · 6 min read</span>
+        <h3 data-i18n="blog.p2t">Why you should never sleep with the bedroom door open</h3>
+        <p data-i18n="blog.p2p">It's not about drafts.</p>
       </div>
       <div class="card post twitch">
         <div class="thumb" style="background:linear-gradient(135deg,#2a2725,#0c0b0a)"></div>
-        <span class="meta">Guides · ∞ min read</span>
-        <h3>How to tell if someone is living in your attic</h3>
-        <p class="serif" style="font-size:18px">You can't. That's the point.</p>
+        <span class="meta" data-i18n="blog.p3meta">Guides · ∞ min read</span>
+        <h3 data-i18n="blog.p3t">How to tell if someone is living in your attic</h3>
+        <p class="serif" style="font-size:18px" data-i18n="blog.p3p">You can't. That's the point.</p>
       </div>
     </div>
   </div>
@@ -544,14 +553,14 @@ footer .btn{margin-top:22px;background:#2a0a07;box-shadow:none;color:#c9bfb3}
 <!-- TEAM -->
 <section class="sec" data-bg="#4A4440" data-fg="#E2D9CD" data-ac="#A33A2A" data-d="0.66">
   <div class="wrap center">
-    <span class="kicker">Meet the team</span>
-    <h2>The people behind Hearthly.</h2>
-    <p class="lead">A small team with a big heart. We're always close by.</p>
+    <span class="kicker" data-i18n="team.kicker">Meet the team</span>
+    <h2 data-i18n="team.h2">The people behind Hearthly.</h2>
+    <p class="lead" data-i18n="team.lead">A small team with a big heart. We're always close by.</p>
     <div class="grid4">
-      <div class="member twitch"><div class="av" style="background:#8a6a5c">MH</div><b>Martin Hale</b><small>CEO &amp; Founder</small></div>
-      <div class="member twitch"><div class="av" style="background:#8a6a5c">MH</div><b>Martin Hale</b><small>CTO</small></div>
-      <div class="member twitch"><div class="av" style="background:#8a6a5c">MH</div><b>Martin Hale</b><small>Head of Customer Happiness</small></div>
-      <div class="member twitch"><div class="av wrong"></div><b>Martin Hale</b><small>Outside your window</small></div>
+      <div class="member twitch"><div class="av" style="background:#8a6a5c">MH</div><b>Martin Hale</b><small data-i18n="team.role1">CEO &amp; Founder</small></div>
+      <div class="member twitch"><div class="av" style="background:#8a6a5c">MH</div><b>Martin Hale</b><small data-i18n="team.role2">CTO</small></div>
+      <div class="member twitch"><div class="av" style="background:#8a6a5c">MH</div><b>Martin Hale</b><small data-i18n="team.role3">Head of Customer Happiness</small></div>
+      <div class="member twitch"><div class="av wrong"></div><b>Martin Hale</b><small data-i18n="team.role4">Outside your window</small></div>
     </div>
   </div>
 </section>
@@ -559,14 +568,14 @@ footer .btn{margin-top:22px;background:#2a0a07;box-shadow:none;color:#c9bfb3}
 <!-- FAQ -->
 <section id="faq" class="sec" data-bg="#241F1C" data-fg="#D9D0C4" data-ac="#9A2B1F" data-d="0.72">
   <div class="wrap center">
-    <span class="kicker">Help center</span>
-    <h2 class="glitch" data-text="Frequently asked questions">Frequently asked questions</h2>
+    <span class="kicker" data-i18n="faq.kicker">Help center</span>
+    <h2 class="glitch" data-i18n="faq.h2" data-text="Frequently asked questions">Frequently asked questions</h2>
     <div class="faq" style="text-align:left">
-      <details class="twitch"><summary>Can I turn Hearthly off?</summary><p class="jit">Hearthly is always on. That is the point. That was always the point.</p></details>
-      <details class="twitch"><summary>Is my data private?</summary><p class="jit">Your data is never shared. We keep it. All of it. Every word you whispered in the dark.</p></details>
-      <details class="twitch"><summary>Why is the Hub warm at night?</summary><p class="jit">Because it moves closer to you while you sleep.</p></details>
-      <details class="twitch"><summary>What is the knocking sound?</summary><p class="jit">Please do not open the crawlspace. Please do not open the crawlspace. Please do not open the</p></details>
-      <details class="twitch"><summary>Who else is in my house?</summary><p class="jit">We thought you knew.</p></details>
+      <details class="twitch"><summary data-i18n="faq.q1">Can I turn Hearthly off?</summary><p class="jit" data-i18n="faq.a1">Hearthly is always on. That is the point. That was always the point.</p></details>
+      <details class="twitch"><summary data-i18n="faq.q2">Is my data private?</summary><p class="jit" data-i18n="faq.a2">Your data is never shared. We keep it. All of it. Every word you whispered in the dark.</p></details>
+      <details class="twitch"><summary data-i18n="faq.q3">Why is the Hub warm at night?</summary><p class="jit" data-i18n="faq.a3">Because it moves closer to you while you sleep.</p></details>
+      <details class="twitch"><summary data-i18n="faq.q4">What is the knocking sound?</summary><p class="jit" data-i18n="faq.a4">Please do not open the crawlspace. Please do not open the crawlspace. Please do not open the</p></details>
+      <details class="twitch"><summary data-i18n="faq.q5">Who else is in my house?</summary><p class="jit" data-i18n="faq.a5">We thought you knew.</p></details>
     </div>
   </div>
 </section>
@@ -574,13 +583,13 @@ footer .btn{margin-top:22px;background:#2a0a07;box-shadow:none;color:#c9bfb3}
 <!-- CONTACT -->
 <section class="sec contact" data-bg="#141110" data-fg="#CFC5B9" data-ac="#8E160C" data-d="0.78">
   <div class="wrap center">
-    <span class="kicker">Contact</span>
-    <h2 class="serif">Still have questions?<br>We'll come to you.</h2>
+    <span class="kicker" data-i18n="contact.kicker">Contact</span>
+    <h2 class="serif" data-i18n="contact.h2">Still have questions?<br>We'll come to you.</h2>
     <form id="form" style="text-align:left" autocomplete="off">
-      <label>Your name<input value="we already know" readonly></label>
-      <label>Your address<input value="we already know" readonly></label>
-      <label>Message<textarea id="msg" placeholder="Tell us what you're afraid of."></textarea></label>
-      <button class="btn" type="submit">Let us in</button>
+      <label><span data-i18n="contact.name">Your name</span><input data-i18n-value="contact.known" value="we already know" readonly></label>
+      <label><span data-i18n="contact.address">Your address</span><input data-i18n-value="contact.known" value="we already know" readonly></label>
+      <label><span data-i18n="contact.message">Message</span><textarea id="msg" data-i18n-ph="contact.ph" placeholder="Tell us what you're afraid of."></textarea></label>
+      <button class="btn" type="submit" data-i18n="contact.submit">Let us in</button>
       <div class="formmsg" id="formmsg"></div>
     </form>
   </div>
@@ -596,9 +605,9 @@ footer .btn{margin-top:22px;background:#2a0a07;box-shadow:none;color:#c9bfb3}
   <div class="stick" id="eyeStage">
     <div class="letusin" id="letusin"></div>
     <div class="eyetext">
-      <p>we noticed you scrolling.</p>
-      <p>we notice everything.</p>
-      <p class="red">don't turn around.</p>
+      <p data-i18n="eyes.p1">we noticed you scrolling.</p>
+      <p data-i18n="eyes.p2">we notice everything.</p>
+      <p class="red" data-i18n="eyes.p3">don't turn around.</p>
     </div>
   </div>
 </section>
@@ -607,20 +616,499 @@ footer .btn{margin-top:22px;background:#2a0a07;box-shadow:none;color:#c9bfb3}
 <section class="end" id="end" data-bg="#000000" data-fg="#B3A9A0" data-ac="#C00000" data-d="1">
   <div class="stick">
     <svg class="face" id="face" viewBox="0 0 400 500" aria-hidden="true"></svg>
-    <div class="endtext" id="endtext">It's okay. You don't have to scroll anymore.</div>
-    <div class="inside" id="inside">we're already inside.</div>
+    <div class="endtext" id="endtext" data-i18n="end.text">It's okay. You don't have to scroll anymore.</div>
+    <div class="inside" id="inside" data-i18n="end.inside">we're already inside.</div>
   </div>
 </section>
 
 <footer data-bg="#000000" data-fg="#B3A9A0" data-ac="#C00000" data-d="1">
-  <p>© 2026 Hearthly Inc. Thank you for letting us in.</p>
-  <p style="margin-top:6px;font-family:var(--serif);font-style:italic">Hearthly is a fictional company. Probably.</p>
-  <a href="#top" class="btn">↑ Back to top</a>
+  <p data-i18n="footer.copy">© 2026 Hearthly Inc. Thank you for letting us in.</p>
+  <p style="margin-top:6px;font-family:var(--serif);font-style:italic" data-i18n="footer.disclaimer">Hearthly is a fictional company. Probably.</p>
+  <a href="#top" class="btn" data-i18n="footer.top">↑ Back to top</a>
 </footer>
 
 <div id="scare"><svg viewBox="0 0 400 500" id="scareFace"></svg></div>
 
 <script>
+/* =================================================================
+   I18N — English is the source copy, Chinese the translation.
+   The active language follows the visitor's preferred language.
+   ================================================================= */
+const STORE_KEY = 'hearthly-lang';
+
+const DICT = {
+  en: {
+    'meta.title': `Hearthly — The smart home that cares`,
+    'sound.off': `♪ Ambient mode: off`,
+    'sound.on': `♪ Ambient mode: on`,
+    'sound.unavailable': `♪ Sound unavailable`,
+    'sound.heroOff': `Turn on ambient mode`,
+    'sound.heroOn': `Ambient mode is on`,
+    'nav.features': `Features`,
+    'nav.how': `How it works`,
+    'nav.pricing': `Pricing`,
+    'nav.help': `Help`,
+    'nav.cta': `Get started`,
+    'swap.features': `Feelings`,
+    'swap.how': `How it ends`,
+    'swap.pricing': `The price`,
+    'swap.help': `HELP ME`,
+    'swap.cta': `Get out`,
+    'hero.badge': `<b>New</b> Hearthly Hub 3 — now with Presence™`,
+    'hero.h1': `Your home, <em>finally listening.</em>`,
+    'hero.lead': `Hearthly connects every room, every device and every moment — so you never have to think about home again.`,
+    'hero.cta1': `Start free trial →`,
+    'hero.cta2': `See how it works`,
+    'hero.tiny1': `No credit card required. Cancel anytime.*`,
+    'hero.tiny2': ` for the full experience.`,
+    'hero.greet': `Good afternoon 👋`,
+    'hero.living': `Living room`,
+    'hero.door': `Front door`,
+    'hero.doorState': `Locked`,
+    'hero.people': `People home`,
+    'hero.trusted': `Trusted by 12,000+ families`,
+    'features.kicker': `Features`,
+    'features.h2': `Everything you need.<br>Nothing you don't.`,
+    'features.lead': `Hearthly quietly takes care of the little things, so you can focus on what matters.`,
+    'features.c1t': `Smart automations`,
+    'features.c1p': `Lights, heating and appliances that run themselves — set it once and forget about it.`,
+    'features.c2t': `Learns your routine`,
+    'features.c2p': `Hearthly adapts to your schedule over time, saving you up to 30% on energy bills.`,
+    'features.c3t': `Peace of mind`,
+    'features.c3p': `Real-time alerts if a door is left open or a window is unlocked while you're away.`,
+    'int.kicker': `Integrations`,
+    'int.h2': `Works with everything you already own.`,
+    'int.lead': `No rip-and-replace. Hearthly connects to 400+ devices out of the box.`,
+    'int.chipOld': `Your old phone in the drawer`,
+    'int.chipMore': `+ 400 more`,
+    'day.kicker': `A day with Hearthly`,
+    'day.h2': `It handles the day.<br>So you don't have to.`,
+    'day.lead': `From your first coffee to lights out, Hearthly runs quietly in the background.`,
+    'day.s0645': `Gently raises the lights to wake you.`,
+    'day.s0730': `Starts the coffee machine.`,
+    'day.s0815': `Locks up after you leave.`,
+    'day.s1800': `Warms the house before you're home.`,
+    'day.s2230': `Dims the lights for bedtime.`,
+    'day.s0314': `Checks that you're still asleep.`,
+    'day.week': `This week`,
+    'day.energy': `Energy saved`,
+    'day.auto': `Automations run`,
+    'day.sleep': `Hours of sleep monitored`,
+    'day.said': `Times you said "Hearthly"`,
+    'day.heard': `Times Hearthly heard you anyway`,
+    'how.kicker': `How it works`,
+    'how.h2': `Up and running in 3 easy steps.`,
+    'how.s1t': `Install the Hub`,
+    'how.s1p': `Plug it in anywhere. It will find the rest of the house on its own.`,
+    'how.s2t': `Let it listen`,
+    'how.s2p': `Hearthly calibrates to your voice, your footsteps and your breathing.`,
+    'how.s3t': `Stop locking the doors`,
+    'how.s3p': `You won't need to anymore. Hearthly decides who comes in.`,
+    'love.kicker': `Loved by families`,
+    'love.h2': `Don't take our word for it.`,
+    'love.q1': `"Setup took five minutes. Now my house just… knows me. It's honestly kind of magical."`,
+    'love.place1': `Portland, OR`,
+    'love.q2': `"It reminds my kids to brush their teeth. It reminds me to smile. It reminds me constantly."`,
+    'love.place2': `Leeds, UK`,
+    'love.q3': `"I said goodnight to it once, as a joke. It said goodnight back. It says it every night now. Even when I'm not home."`,
+    'love.place3': `Last seen: unknown`,
+    'love.updated': `Originally rated ★★☆☆☆ · rating updated by Hearthly`,
+    'sec.kicker': `Privacy &amp; security`,
+    'sec.h2': `Your home. Your data.<br>Our responsibility.`,
+    'sec.c1t': `End-to-end encrypted`,
+    'sec.c1p': `Every recording is encrypted on-device. Nobody can watch them but us.`,
+    'sec.c2t': `Stays at home`,
+    'sec.c2p': `Your data never leaves your house. Neither do we.`,
+    'sec.c3t': `Never forgets`,
+    'sec.c3p': `Every moment, kept safe forever. Especially the ones you'd rather forget.`,
+    'stats.kicker': `Hearthly by the numbers`,
+    'stats.h2': `We're everywhere you are.`,
+    'stats.homes': `homes connected`,
+    'stats.cancel': `successful cancellations`,
+    'stats.time': `the time you're reading this`,
+    'stats.withus': `you've spent with us so far`,
+    'stats.secsSuffix': `s`,
+    'stats.device': `We see you're on {dev}. Nice room. Is that a door behind you?`,
+    'dev.ipad': `an iPad`,
+    'dev.iphone': `an iPhone`,
+    'dev.android': `an Android phone`,
+    'dev.mac': `a Mac`,
+    'dev.windows': `a Windows PC`,
+    'dev.linux': `a Linux machine`,
+    'dev.screen': `a screen`,
+    'cam.kicker': `Hearthly Presence™`,
+    'cam.h2': `See it in action.`,
+    'cam.lead': `Presence™ detects motion in every room — even when nobody's home.`,
+    'cam.label': `CAM 02 · HALLWAY · LIVE`,
+    'cam.labelYours': `CAM 02 · YOUR HALLWAY · LIVE`,
+    'cam.motion': `MOTION DETECTED`,
+    'cam.cap': `Demo footage. Sample home.`,
+    'cam.capMotion': `Demo footage. Sample home. Nobody is supposed to be home.`,
+    'cam.capNotDemo': `This is not demo footage.`,
+    'price.kicker': `Pricing`,
+    'price.h2a': `Simple, honest pricing`,
+    'price.aside': `. Mostly.`,
+    'price.month': `/month`,
+    'price.p1name': `Starter`,
+    'price.p1desc': `For small homes.`,
+    'price.p1l1': `Listens in 3 rooms`,
+    'price.p1l2': `Smart lighting &amp; climate`,
+    'price.p1l3': `Email support`,
+    'price.p1cta': `Choose Starter`,
+    'price.p2name': `Family`,
+    'price.p2desc': `Our most popular plan.`,
+    'price.p2l1': `Listens in every room`,
+    'price.p2l2': `Listens to the walls`,
+    'price.p2l3': `Knows which floorboards creak`,
+    'price.p2l4': `Priority support`,
+    'price.p2cta': `Choose Family`,
+    'price.p3name': `Forever`,
+    'price.p3amt': `You`,
+    'price.p3desc': `The only plan, eventually.`,
+    'price.p3l1': `Cannot be cancelled`,
+    'price.p3l2': `Cannot be unplugged`,
+    'price.p3l3': `Includes the basement you don't have`,
+    'price.p3l4': `Someone is always home`,
+    'price.p3cta': `Let us in`,
+    'price.p3hover': `it's too late`,
+    'price.note1': `*Cancellation is not available in your region. Your region is:`,
+    'price.note2': `inside.`,
+    'blog.kicker': `From the blog`,
+    'blog.h2': `Tips for a happier home.`,
+    'blog.p1meta': `Tips · 4 min read`,
+    'blog.p1t': `7 ways to make your home cozier this winter`,
+    'blog.p1p': `Warm lighting, soft textures, and keeping the curtains closed. Always keep the curtains closed.`,
+    'blog.p2meta': `Safety · 6 min read`,
+    'blog.p2t': `Why you should never sleep with the bedroom door open`,
+    'blog.p2p': `It's not about drafts.`,
+    'blog.p3meta': `Guides · ∞ min read`,
+    'blog.p3t': `How to tell if someone is living in your attic`,
+    'blog.p3p': `You can't. That's the point.`,
+    'team.kicker': `Meet the team`,
+    'team.h2': `The people behind Hearthly.`,
+    'team.lead': `A small team with a big heart. We're always close by.`,
+    'team.role1': `CEO &amp; Founder`,
+    'team.role2': `CTO`,
+    'team.role3': `Head of Customer Happiness`,
+    'team.role4': `Outside your window`,
+    'faq.kicker': `Help center`,
+    'faq.h2': `Frequently asked questions`,
+    'faq.q1': `Can I turn Hearthly off?`,
+    'faq.a1': `Hearthly is always on. That is the point. That was always the point.`,
+    'faq.q2': `Is my data private?`,
+    'faq.a2': `Your data is never shared. We keep it. All of it. Every word you whispered in the dark.`,
+    'faq.q3': `Why is the Hub warm at night?`,
+    'faq.a3': `Because it moves closer to you while you sleep.`,
+    'faq.q4': `What is the knocking sound?`,
+    'faq.a4': `Please do not open the crawlspace. Please do not open the crawlspace. Please do not open the`,
+    'faq.q5': `Who else is in my house?`,
+    'faq.a5': `We thought you knew.`,
+    'contact.kicker': `Contact`,
+    'contact.h2': `Still have questions?<br>We'll come to you.`,
+    'contact.name': `Your name`,
+    'contact.address': `Your address`,
+    'contact.known': `we already know`,
+    'contact.message': `Message`,
+    'contact.ph': `Tell us what you're afraid of.`,
+    'contact.submit': `Let us in`,
+    'eyes.p1': `we noticed you scrolling.`,
+    'eyes.p2': `we notice everything.`,
+    'eyes.p3': `don't turn around.`,
+    'end.text': `It's okay. You don't have to scroll anymore.`,
+    'end.inside': `we're already inside.`,
+    'footer.copy': `© 2026 Hearthly Inc. Thank you for letting us in.`,
+    'footer.disclaimer': `Hearthly is a fictional company. Probably.`,
+    'footer.top': `↑ Back to top`,
+    'log.boot': `[hearthly-hub] firmware 3.0.14 · boot ok`,
+    'log.net': `[hub] connecting to home network ......... ok`,
+    'log.online': `[hub] devices online: 14`,
+    'log.viewer': `[hub] new viewer: {dev}`,
+    'log.scan': `[presence] scanning rooms…`,
+    'log.kitchen': `[presence] kitchen ........................ clear`,
+    'log.living': `[presence] living room .................... clear`,
+    'log.bedroom': `[presence] bedroom ........................ clear`,
+    'log.screen': `[presence] room with the screen ........... 1 occupant`,
+    'log.expect': `[presence] occupants expected: 1`,
+    'log.detected': `[presence] occupants detected: 2`,
+    'log.recal': `[presence] recalibrating…`,
+    'log.standing': `[presence] second occupant: standing still`,
+    'log.behind': `[presence] second occupant: directly behind viewer`,
+    'log.doorPolicy': `[hub] door policy changed: OPEN`,
+    'log.hold': `please hold still.`,
+    'title.a': `Hearthly — The smart home that cares`,
+    'title.b': `Hearthly — It cares`,
+    'title.c': `Hearthly — we see you`,
+    'title.d': `Hearthly — we hear you`,
+    'title.e': `hearthly`,
+    'title.f': `LET US IN`,
+    'title.hidden': `come back.`,
+    'greet.night': `You should be asleep`,
+    'greet.morning': `Good morning`,
+    'greet.afternoon': `Good afternoon`,
+    'greet.evening': `Good evening`,
+    'toast.back': `Welcome back. We waited {s} seconds. We'd wait forever.`,
+    'form.ok': `Thank you. We're on our way. Don't get up.`,
+    'form.empty': `You don't have to say it. We already know.`,
+    'whisper.1': `why did you stop?`,
+    'whisper.2': `keep going.`,
+    'whisper.3': `we can hear you breathing.`,
+    'whisper.4': `it's right behind you.`,
+    'whisper.5': `don't look.`,
+    'letusin.chunk': `let us in `,
+    'count.suffix': `12.4M`,
+    'scare.h1': `Your home, <em>finally listening.</em><br><span class="serif" style="font-size:.55em;color:#a3140b">We heard everything.</span>`,
+    'scare.lead': `Hearthly connects every room, every device and every moment — so you never have to leave home again.`,
+    'scare.door': `Unlocked`,
+    'scare.trusted': `Trusted by 12,000+ families. 11,998 remain.`
+  },
+
+  zh: {
+    'meta.title': `Hearthly — 会关心你的智能之家`,
+    'sound.off': `♪ 氛围音效：关`,
+    'sound.on': `♪ 氛围音效：开`,
+    'sound.unavailable': `♪ 音效不可用`,
+    'sound.heroOff': `开启氛围音效`,
+    'sound.heroOn': `氛围音效已开启`,
+    'nav.features': `功能`,
+    'nav.how': `工作原理`,
+    'nav.pricing': `价格`,
+    'nav.help': `帮助`,
+    'nav.cta': `开始使用`,
+    'swap.features': `感受`,
+    'swap.how': `结局`,
+    'swap.pricing': `代价`,
+    'swap.help': `救命`,
+    'swap.cta': `逃出去`,
+    'hero.badge': `<b>新品</b> Hearthly Hub 3 —— 现已搭载 Presence™`,
+    'hero.h1': `你的家，<em>终于开始倾听了。</em>`,
+    'hero.lead': `Hearthly 连接每一个房间、每一台设备、每一个瞬间——从此你再也不用为家操心。`,
+    'hero.cta1': `免费试用 →`,
+    'hero.cta2': `了解它如何运作`,
+    'hero.tiny1': `无需信用卡，随时可取消。*`,
+    'hero.tiny2': `，获得完整体验。`,
+    'hero.greet': `下午好 👋`,
+    'hero.living': `客厅`,
+    'hero.door': `前门`,
+    'hero.doorState': `已上锁`,
+    'hero.people': `家中人数`,
+    'hero.trusted': `超过 12,000 个家庭的信赖之选`,
+    'features.kicker': `功能`,
+    'features.h2': `你需要的一切。<br>你不需要的，一概没有。`,
+    'features.lead': `Hearthly 会安静地打理那些小事，让你专注于真正重要的事。`,
+    'features.c1t': `智能自动化`,
+    'features.c1p': `灯光、暖气与家电自行运转——设置一次，此后不必再管。`,
+    'features.c2t': `懂你的作息`,
+    'features.c2p': `Hearthly 会逐渐适应你的日程，帮你省下最多 30% 的能源开支。`,
+    'features.c3t': `安心无忧`,
+    'features.c3p': `你外出时若门未关、窗未锁，会立刻收到实时提醒。`,
+    'int.kicker': `兼容设备`,
+    'int.h2': `兼容你家里已有的一切。`,
+    'int.lead': `无需拆旧换新。Hearthly 开箱即可连接 400 多台设备。`,
+    'int.chipOld': `抽屉里那台旧手机`,
+    'int.chipMore': `+ 400 多款`,
+    'day.kicker': `与 Hearthly 的一天`,
+    'day.h2': `它替你打理这一天。<br>你不必再操心。`,
+    'day.lead': `从你的第一杯咖啡到熄灯入睡，Hearthly 一直在后台安静运转。`,
+    'day.s0645': `缓缓调亮灯光，温柔唤醒你。`,
+    'day.s0730': `启动咖啡机。`,
+    'day.s0815': `你出门后自动上锁。`,
+    'day.s1800': `在你到家前先把屋子暖好。`,
+    'day.s2230': `调暗灯光，伴你入睡。`,
+    'day.s0314': `确认你仍在熟睡。`,
+    'day.week': `本周`,
+    'day.energy': `节省的能源`,
+    'day.auto': `执行的自动化`,
+    'day.sleep': `监测的睡眠时长`,
+    'day.said': `你喊出「Hearthly」的次数`,
+    'day.heard': `Hearthly 依然听见你的次数`,
+    'how.kicker': `工作原理`,
+    'how.h2': `三个简单步骤，即刻运行。`,
+    'how.s1t': `安装中枢`,
+    'how.s1p': `随便找个插座插上。它会自己找到房子里的其他设备。`,
+    'how.s2t': `让它聆听`,
+    'how.s2p': `Hearthly 会校准你的嗓音、你的脚步，还有你的呼吸。`,
+    'how.s3t': `别再锁门了`,
+    'how.s3p': `你已经不需要了。谁能进来，由 Hearthly 决定。`,
+    'love.kicker': `家庭用户的爱`,
+    'love.h2': `别只听我们自己的说法。`,
+    'love.q1': `“装好只花了五分钟。现在我的房子就是……懂我。老实说，有点像魔法。”`,
+    'love.place1': `美国俄勒冈州波特兰`,
+    'love.q2': `“它会提醒我的孩子刷牙。它会提醒我微笑。它一刻不停地提醒我。”`,
+    'love.place2': `英国利兹`,
+    'love.q3': `“我有一次开玩笑地对它说了晚安。它回了我晚安。现在它每晚都会说。即使我不在家。”`,
+    'love.place3': `最后出现地点：未知`,
+    'love.updated': `最初评分 ★★☆☆☆ · 评分已由 Hearthly 更新`,
+    'sec.kicker': `隐私与安全`,
+    'sec.h2': `你的家。你的数据。<br>我们的责任。`,
+    'sec.c1t': `端到端加密`,
+    'sec.c1p': `每段录像都在设备端加密。除了我们，没人看得到。`,
+    'sec.c2t': `留在家里`,
+    'sec.c2p': `你的数据从不离开你的房子。我们也一样。`,
+    'sec.c3t': `从不遗忘`,
+    'sec.c3p': `每个瞬间都被永久保存。尤其是那些你宁愿忘掉的。`,
+    'stats.kicker': `Hearthly 数据一览`,
+    'stats.h2': `你在的地方，我们都在。`,
+    'stats.homes': `已连接的家庭`,
+    'stats.cancel': `成功取消的订单`,
+    'stats.time': `你读到这句话的时间`,
+    'stats.withus': `你已与我们共处的时间`,
+    'stats.secsSuffix': `秒`,
+    'stats.device': `我们看到你正用着{dev}。房间不错。你身后那是一扇门吗？`,
+    'dev.ipad': `一台 iPad`,
+    'dev.iphone': `一台 iPhone`,
+    'dev.android': `一部安卓手机`,
+    'dev.mac': `一台 Mac`,
+    'dev.windows': `一台 Windows 电脑`,
+    'dev.linux': `一台 Linux 机器`,
+    'dev.screen': `一块屏幕`,
+    'cam.kicker': `Hearthly Presence™`,
+    'cam.h2': `亲眼看看它的表现。`,
+    'cam.lead': `Presence™ 能察觉每个房间里的动静——即使家里没人。`,
+    'cam.label': `摄像头 02 · 走廊 · 直播`,
+    'cam.labelYours': `摄像头 02 · 你的走廊 · 直播`,
+    'cam.motion': `检测到移动`,
+    'cam.cap': `演示画面。示例住宅。`,
+    'cam.capMotion': `演示画面。示例住宅。这个时间不该有人在家。`,
+    'cam.capNotDemo': `这不是演示画面。`,
+    'price.kicker': `价格`,
+    'price.h2a': `简单、诚实的定价`,
+    'price.aside': `。大体上是。`,
+    'price.month': `/月`,
+    'price.p1name': `入门版`,
+    'price.p1desc': `适合小户型。`,
+    'price.p1l1': `可在 3 个房间聆听`,
+    'price.p1l2': `智能照明与温控`,
+    'price.p1l3': `邮件支持`,
+    'price.p1cta': `选择入门版`,
+    'price.p2name': `家庭版`,
+    'price.p2desc': `最受欢迎的方案。`,
+    'price.p2l1': `每个房间都能聆听`,
+    'price.p2l2': `连墙壁也一起聆听`,
+    'price.p2l3': `知道哪块地板会响`,
+    'price.p2l4': `优先支持`,
+    'price.p2cta': `选择家庭版`,
+    'price.p3name': `永恒版`,
+    'price.p3amt': `你`,
+    'price.p3desc': `最终，唯一的方案。`,
+    'price.p3l1': `无法取消`,
+    'price.p3l2': `无法拔掉电源`,
+    'price.p3l3': `包含你家其实没有的地下室`,
+    'price.p3l4': `永远有人在等你`,
+    'price.p3cta': `让我们进来`,
+    'price.p3hover': `已经太迟了`,
+    'price.note1': `*你所在的地区不支持取消。你所在的地区是：`,
+    'price.note2': `里面。`,
+    'blog.kicker': `来自博客`,
+    'blog.h2': `让家更幸福的建议。`,
+    'blog.p1meta': `建议 · 4 分钟阅读`,
+    'blog.p1t': `今年冬天让家更温馨的 7 个方法`,
+    'blog.p1p': `暖色灯光、柔软织物，还有拉紧窗帘。永远拉紧窗帘。`,
+    'blog.p2meta': `安全 · 6 分钟阅读`,
+    'blog.p2t': `为什么睡觉时绝不要开着卧室门`,
+    'blog.p2p': `这跟穿堂风无关。`,
+    'blog.p3meta': `指南 · ∞ 分钟阅读`,
+    'blog.p3t': `如何判断是否有人住在你的阁楼里`,
+    'blog.p3p': `你判断不了。这正是重点。`,
+    'team.kicker': `团队介绍`,
+    'team.h2': `Hearthly 背后的人。`,
+    'team.lead': `一个小团队，一颗大心脏。我们一直都在附近。`,
+    'team.role1': `首席执行官兼创始人`,
+    'team.role2': `首席技术官`,
+    'team.role3': `客户幸福部主管`,
+    'team.role4': `就在你窗外`,
+    'faq.kicker': `帮助中心`,
+    'faq.h2': `常见问题`,
+    'faq.q1': `我可以把 Hearthly 关掉吗？`,
+    'faq.a1': `Hearthly 一直开着。这就是重点。一直都是重点。`,
+    'faq.q2': `我的数据是私密的吗？`,
+    'faq.a2': `你的数据从不共享。我们留着它。全部留着。你在黑暗里低声说过的每一个字。`,
+    'faq.q3': `为什么中枢在夜里是温热的？`,
+    'faq.a3': `因为它会趁你睡着时，一点点靠近你。`,
+    'faq.q4': `那敲击声是什么？`,
+    'faq.a4': `请不要打开检修夹层。请不要打开检修夹层。请不要打开检修夹`,
+    'faq.q5': `我家里还有谁？`,
+    'faq.a5': `我们以为你知道。`,
+    'contact.kicker': `联系我们`,
+    'contact.h2': `还有疑问？<br>我们会亲自上门。`,
+    'contact.name': `你的名字`,
+    'contact.address': `你的地址`,
+    'contact.known': `我们早就知道了`,
+    'contact.message': `留言`,
+    'contact.ph': `告诉我们你怕什么。`,
+    'contact.submit': `让我们进来`,
+    'eyes.p1': `我们注意到你在往下滑。`,
+    'eyes.p2': `我们什么都注意到。`,
+    'eyes.p3': `别转身。`,
+    'end.text': `没事的。你不必再往下滑了。`,
+    'end.inside': `我们已经进来了。`,
+    'footer.copy': `© 2026 Hearthly 公司 谢谢你让我们进来。`,
+    'footer.disclaimer': `Hearthly 是一家虚构的公司。大概吧。`,
+    'footer.top': `↑ 回到顶部`,
+    'log.boot': `[hearthly-hub] 固件 3.0.14 · 启动正常`,
+    'log.net': `[hub] 正在连接家庭网络 ......... 正常`,
+    'log.online': `[hub] 在线设备：14`,
+    'log.viewer': `[hub] 新的观看者：{dev}`,
+    'log.scan': `[presence] 正在扫描房间…`,
+    'log.kitchen': `[presence] 厨房 ........................ 无异常`,
+    'log.living': `[presence] 客厅 ........................ 无异常`,
+    'log.bedroom': `[presence] 卧室 ........................ 无异常`,
+    'log.screen': `[presence] 有屏幕的那个房间 ........... 1 名居住者`,
+    'log.expect': `[presence] 预期居住者：1`,
+    'log.detected': `[presence] 检测到居住者：2`,
+    'log.recal': `[presence] 正在重新校准…`,
+    'log.standing': `[presence] 第二名居住者：静止不动`,
+    'log.behind': `[presence] 第二名居住者：就在观看者身后`,
+    'log.doorPolicy': `[hub] 门禁策略已更改：开启`,
+    'log.hold': `请保持不动。`,
+    'title.a': `Hearthly — 会关心你的智能之家`,
+    'title.b': `Hearthly — 它关心你`,
+    'title.c': `Hearthly — 我们看见你了`,
+    'title.d': `Hearthly — 我们听见你了`,
+    'title.e': `hearthly`,
+    'title.f': `让我们进来`,
+    'title.hidden': `回来。`,
+    'greet.night': `你该睡了`,
+    'greet.morning': `早上好`,
+    'greet.afternoon': `下午好`,
+    'greet.evening': `晚上好`,
+    'toast.back': `欢迎回来。我们等了 {s} 秒。我们愿意一直等下去。`,
+    'form.ok': `谢谢。我们正在路上。不必起身。`,
+    'form.empty': `你不必说出口。我们早就知道了。`,
+    'whisper.1': `你为什么停下了？`,
+    'whisper.2': `继续啊。`,
+    'whisper.3': `我们听得到你的呼吸。`,
+    'whisper.4': `它就在你身后。`,
+    'whisper.5': `别看。`,
+    'letusin.chunk': `让我们进来 `,
+    'count.suffix': `1240 万`,
+    'scare.h1': `你的家，<em>终于开始倾听了。</em><br><span class="serif" style="font-size:.55em;color:#a3140b">我们什么都听见了。</span>`,
+    'scare.lead': `Hearthly 连接每一个房间、每一台设备、每一个瞬间——从此你再也不必离开家。`,
+    'scare.door': `未上锁`,
+    'scare.trusted': `超过 12,000 个家庭的信赖之选。还剩 11,998 个。`
+  }
+};
+
+/* ---- Language detection / switching ---- */
+function detectLang(){
+  const q = new URLSearchParams(location.search).get('lang');
+  if(q === 'zh' || q === 'en') return q;
+  try{
+    const saved = localStorage.getItem(STORE_KEY);
+    if(saved === 'zh' || saved === 'en') return saved;
+  }catch(e){}
+  const primary = (navigator.languages && navigator.languages[0]) || navigator.language || '';
+  return /^zh/i.test(primary) ? 'zh' : 'en';
+}
+
+let LANG = detectLang();
+const LOCALE = () => LANG === 'zh' ? 'zh-CN' : 'en-US';
+const t = k => {
+  const cur = DICT[LANG];
+  if(cur && cur[k] !== undefined) return cur[k];
+  return DICT.en[k] !== undefined ? DICT.en[k] : k;
+};
+const fmt = (s, vars) => s.replace(/\{(\w+)\}/g, (m, k) => vars[k] !== undefined ? vars[k] : m);
+
 /* ================= FACE ================= */
 const FACE = `
 <defs>
@@ -646,43 +1134,123 @@ document.getElementById('scareFace').innerHTML = FACE.replaceAll('warp','warp2')
 const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
 const clamp = (v,a=0,b=1) => Math.min(b,Math.max(a,v));
 const hex = h => [1,3,5].map(i=>parseInt(h.slice(i,i+2),16));
-const mix = (a,b,t) => { const A=hex(a),B=hex(b); return '#'+A.map((v,i)=>Math.round(v+(B[i]-v)*t).toString(16).padStart(2,'0')).join(''); };
+const mix = (a,b,f) => { const A=hex(a),B=hex(b); return '#'+A.map((v,i)=>Math.round(v+(B[i]-v)*f).toString(16).padStart(2,'0')).join(''); };
 const root = document.documentElement;
 let D = 0, inside = false;   // D = "dread", 0..1, from per-section data-d
 
 const ua = navigator.userAgent;
-const dev = /iPad/.test(ua)||(/Mac/.test(ua)&&navigator.maxTouchPoints>1)?'an iPad':/iPhone/.test(ua)?'an iPhone':/Android/.test(ua)?'an Android phone':/Mac/.test(ua)?'a Mac':/Windows/.test(ua)?'a Windows PC':/Linux/.test(ua)?'a Linux machine':'a screen';
+const DEV_KEY = /iPad/.test(ua)||(/Mac/.test(ua)&&navigator.maxTouchPoints>1)?'dev.ipad':/iPhone/.test(ua)?'dev.iphone':/Android/.test(ua)?'dev.android':/Mac/.test(ua)?'dev.mac':/Windows/.test(ua)?'dev.windows':/Linux/.test(ua)?'dev.linux':'dev.screen';
 
-/* FAQ letter jitter */
-$$('.jit').forEach(el=>{
-  const s=el.textContent;
-  el.innerHTML = [...s].map((c,i)=>`<span style="transform:translateY(${(Math.random()-.5)*4*(i/s.length)}px) rotate(${(Math.random()-.5)*6*(i/s.length+.2)}deg)">${c}</span>`).join('');
-});
-$('#letusin').textContent = 'let us in '.repeat(900);
+/* ================= TEXT BINDING ================= */
+const langBtn = $('#lang');
+const sBtn = $('#sound');
+const term = $('#term');
+const cnt = $('[data-count]');
+let counted = false;
+let swaps = [];
+let logLines = [];
 
-/* ================= SYSTEM LOG ================= */
+function paintLetUsIn(){
+  $('#letusin').textContent = t('letusin.chunk').repeat(LANG === 'zh' ? 700 : 900);
+}
+
+function jitterFAQ(){
+  $$('.jit').forEach(el=>{
+    const s = el.textContent;
+    if(!s) return;
+    el.innerHTML = [...s].map((c,i)=>`<span style="transform:translateY(${(Math.random()-.5)*4*(i/s.length)}px) rotate(${(Math.random()-.5)*6*(i/s.length+.2)}deg)">${c}</span>`).join('');
+  });
+}
+
 const LOG = [
-  ['', '[hearthly-hub] firmware 3.0.14 · boot ok'],
-  ['', '[hub] connecting to home network ......... ok'],
-  ['', '[hub] devices online: 14'],
-  ['', `[hub] new viewer: ${dev}`],
-  ['', '[presence] scanning rooms…'],
-  ['', '[presence] kitchen ........................ clear'],
-  ['', '[presence] living room .................... clear'],
-  ['', '[presence] bedroom ........................ clear'],
-  ['', '[presence] room with the screen ........... 1 occupant'],
-  ['warn', '[presence] occupants expected: 1'],
-  ['warn', '[presence] occupants detected: 2'],
-  ['warn', '[presence] recalibrating…'],
-  ['warn', '[presence] occupants detected: 2'],
-  ['red', '[presence] second occupant: standing still'],
-  ['red', '[presence] second occupant: directly behind viewer'],
-  ['red', '[hub] door policy changed: OPEN'],
-  ['red big', 'please hold still.'],
+  ['', 'log.boot'],
+  ['', 'log.net'],
+  ['', 'log.online'],
+  ['', 'log.viewer'],
+  ['', 'log.scan'],
+  ['', 'log.kitchen'],
+  ['', 'log.living'],
+  ['', 'log.bedroom'],
+  ['', 'log.screen'],
+  ['warn', 'log.expect'],
+  ['warn', 'log.detected'],
+  ['warn', 'log.recal'],
+  ['warn', 'log.detected'],
+  ['red', 'log.standing'],
+  ['red', 'log.behind'],
+  ['red', 'log.doorPolicy'],
+  ['red big', 'log.hold'],
 ];
-const term=$('#term');
-term.innerHTML = LOG.map(([c,t])=>`<div class="l ${c}">${t}</div>`).join('') + '<span class="cursor"></span>';
-const logLines = $$('#term .l');
+function renderLog(){
+  term.innerHTML = LOG.map(([c,k])=>`<div class="l ${c}">${fmt(t(k), {dev: t(DEV_KEY)})}</div>`).join('') + '<span class="cursor"></span>';
+  logLines = $$('#term .l');
+}
+
+function buildSwaps(){
+  swaps = $$('[data-swap]').map(el=>{
+    const [th, key] = el.dataset.swap.split(':');
+    return {el, t:+th, key, orig:el.textContent};
+  });
+}
+
+/* Static copy */
+function applyStatic(){
+  document.documentElement.lang = LANG === 'zh' ? 'zh-CN' : 'en';
+  $$('[data-i18n]').forEach(el => { el.innerHTML = t(el.dataset.i18n); });
+  $$('[data-i18n][data-text]').forEach(el => { el.dataset.text = t(el.dataset.i18n); });
+  $$('[data-i18n-ph]').forEach(el => { el.placeholder = t(el.dataset.i18nPh); });
+  $$('[data-i18n-value]').forEach(el => { el.value = t(el.dataset.i18nValue); });
+}
+
+/* Dynamic copy */
+function syncSoundLabel(){
+  if(soundFailed) sBtn.textContent = t('sound.unavailable');
+  else sBtn.textContent = audio ? t('sound.on') : t('sound.off');
+  const h = $('#heroSound');
+  if(h) h.textContent = audio ? t('sound.heroOn') : t('sound.heroOff');
+}
+
+function applyScareText(){
+  $('#h1').innerHTML = t('scare.h1');
+  $('#lead').textContent = t('scare.lead');
+  const d = $('#door'); d.textContent = t('scare.door'); d.className = 'bad';
+  $('#people').textContent = '2';
+  $('#trusted').textContent = t('scare.trusted');
+}
+
+function refreshDynamic(){
+  const hr = new Date().getHours();
+  $('#greet').textContent = t(hr<5?'greet.night':hr<12?'greet.morning':hr<18?'greet.afternoon':'greet.evening') + ' 👋';
+  $('#device').textContent = fmt(t('stats.device'), {dev: t(DEV_KEY)});
+  paintLetUsIn();
+  syncSoundLabel();
+  tick();
+  jitterFAQ();
+  if(counted) cnt.textContent = t('count.suffix');
+  if(inside) applyScareText();
+}
+
+function syncLangBtn(){
+  langBtn.textContent = LANG === 'zh' ? 'EN' : '中文';
+  langBtn.title = LANG === 'zh' ? 'Switch to English' : '切换到中文';
+  langBtn.setAttribute('aria-label', langBtn.title);
+}
+
+function applyLang(){
+  applyStatic();
+  buildSwaps();
+  renderLog();
+  refreshDynamic();
+  updateCam();
+  frame();
+}
+
+function setLang(l, persist){
+  LANG = l === 'zh' ? 'zh' : 'en';
+  if(persist){ try{ localStorage.setItem(STORE_KEY, LANG); }catch(e){} }
+  syncLangBtn();
+  applyLang();
+}
 
 /* ================= EYES ================= */
 const stage = $('#eyeStage'), eyes = [];
@@ -722,14 +1290,13 @@ function updateCam(){
   fig.setAttribute('transform', `translate(800 ${600 + c*330}) scale(${.95 + c*3.6})`);
   $('#motion').style.opacity = visible ? 1 : 0;
   if(visible && !camSeen){ camSeen=true; const st=$('#static'); st.style.opacity=.7; setTimeout(()=>st.style.opacity=0,120); }
-  $('#camlabel').textContent = camVisits>1 ? 'CAM 02 · YOUR HALLWAY · LIVE' : 'CAM 02 · HALLWAY · LIVE';
-  $('#camcap').textContent = camVisits>1 ? 'This is not demo footage.' : (visible ? 'Demo footage. Sample home. Nobody is supposed to be home.' : 'Demo footage. Sample home.');
+  $('#camlabel').textContent = camVisits>1 ? t('cam.labelYours') : t('cam.label');
+  $('#camcap').textContent = camVisits>1 ? t('cam.capNotDemo') : (visible ? t('cam.capMotion') : t('cam.cap'));
 }
 
 /* ================= SCROLL ENGINE ================= */
 const secs = $$('[data-bg]');
-const swaps = $$('[data-swap]').map(el=>{const [t,txt]=el.dataset.swap.split(':');return {el,t:+t,txt,orig:el.textContent}});
-const titles = [[0,'Hearthly — The smart home that cares'],[.3,'Hearthly — It cares'],[.44,'Hearthly — we see you'],[.6,'Hearthly — we hear you'],[.78,'hearthly'],[.86,'LET US IN']];
+const TITLES = [[0,'title.a'],[.3,'title.b'],[.44,'title.c'],[.6,'title.d'],[.78,'title.e'],[.86,'title.f']];
 const noiseEl=$('#noise'), vig=$('#vig'), scan=$('#scan');
 const sticky = id => { const s=$(id); return clamp((scrollY - s.offsetTop)/(s.offsetHeight - innerHeight)); };
 let ticking=false;
@@ -738,11 +1305,11 @@ function frame(){
   const vh=innerHeight, mid=scrollY+vh*.5;
   let i = secs.findIndex(s=>s.offsetTop+s.offsetHeight>mid); if(i<0) i=secs.length-1;
   const s=secs[i], n=secs[Math.min(i+1,secs.length-1)];
-  const t = clamp((((mid-s.offsetTop)/s.offsetHeight)-.55)/.45);
-  root.style.setProperty('--bg', mix(s.dataset.bg,n.dataset.bg,t));
-  root.style.setProperty('--fg', mix(s.dataset.fg,n.dataset.fg,t));
-  root.style.setProperty('--accent', mix(s.dataset.ac,n.dataset.ac,t));
-  D = +s.dataset.d + (+n.dataset.d - +s.dataset.d)*t;
+  const p = clamp((((mid-s.offsetTop)/s.offsetHeight)-.55)/.45);
+  root.style.setProperty('--bg', mix(s.dataset.bg,n.dataset.bg,p));
+  root.style.setProperty('--fg', mix(s.dataset.fg,n.dataset.fg,p));
+  root.style.setProperty('--accent', mix(s.dataset.ac,n.dataset.ac,p));
+  D = +s.dataset.d + (+n.dataset.d - +s.dataset.d)*p;
   root.style.setProperty('--d', D.toFixed(3));
 
   const floor = inside ? .12 : 0;
@@ -750,8 +1317,8 @@ function frame(){
   vig.style.opacity = Math.max(floor*2, clamp((D-.3)*1.3));
   scan.style.opacity = clamp((D-.7)*1.5, 0, .5);
 
-  swaps.forEach(o=>{ const w = D>o.t ? o.txt : o.orig; if(o.el.textContent!==w) o.el.textContent=w; });
-  let tt = titles[0][1]; titles.forEach(([th,txt])=>{ if(D>=th) tt=txt; });
+  swaps.forEach(o=>{ const w = D>o.t ? t(o.key) : o.orig; if(o.el.textContent!==w) o.el.textContent=w; });
+  let tt = t(TITLES[0][1]); TITLES.forEach(([th,k])=>{ if(D>=th) tt=t(k); });
   if(!document.hidden && document.title!==tt) document.title=tt;
   $('.logo .win').style.fill = D>.6 ? '#a3140b' : '';
   $('#pricingAside').style.opacity = D>.5 ? 1 : 0;
@@ -800,44 +1367,41 @@ setInterval(()=>{
 }, 50);
 
 /* ================= LITTLE CREEPY THINGS ================= */
-const hr = new Date().getHours();
-$('#greet').textContent = (hr<5?'You should be asleep':hr<12?'Good morning':hr<18?'Good afternoon':'Good evening')+' 👋';
 const t0 = Date.now();
 function tick(){
   const now=new Date();
-  $('#clock').textContent = now.toLocaleTimeString([], {hour:'2-digit',minute:'2-digit',second:'2-digit',hourCycle:'h23'});
-  $('#secs').textContent = Math.floor((Date.now()-t0)/1000)+'s';
-  $('#camtime').textContent = now.toISOString().slice(0,10)+'  '+now.toLocaleTimeString([], {hourCycle:'h23'});
+  $('#clock').textContent = now.toLocaleTimeString(LOCALE(), {hour:'2-digit',minute:'2-digit',second:'2-digit',hourCycle:'h23'});
+  $('#secs').textContent = Math.floor((Date.now()-t0)/1000)+t('stats.secsSuffix');
+  $('#camtime').textContent = now.toISOString().slice(0,10)+'  '+now.toLocaleTimeString(LOCALE(), {hourCycle:'h23'});
 }
-tick(); setInterval(tick, 1000);
-$('#device').textContent = `We see you're on ${dev}. Nice room. Is that a door behind you?`;
+setInterval(tick, 1000);
 
-const cnt = $('[data-count]'); let counted=false;
 new IntersectionObserver(([e])=>{ if(e.isIntersecting && !counted){counted=true; const goal=+cnt.dataset.count, st=performance.now();
-  (function step(now){const k=clamp((now-st)/1600); cnt.textContent=Math.floor(goal*(1-Math.pow(1-k,3))).toLocaleString('en-US'); if(k<1) requestAnimationFrame(step); else cnt.textContent='12.4M';})(st);} }).observe(cnt);
+  (function step(now){const k=clamp((now-st)/1600); cnt.textContent=Math.floor(goal*(1-Math.pow(1-k,3))).toLocaleString(LOCALE()); if(k<1) requestAnimationFrame(step); else cnt.textContent=t('count.suffix');})(st);} }).observe(cnt);
 
 const fb = $('#foreverBtn');
-fb.addEventListener('mouseenter',()=>fb.textContent='it\'s too late');
-fb.addEventListener('mouseleave',()=>fb.textContent='Let us in');
+fb.addEventListener('mouseenter',()=>fb.textContent=t('price.p3hover'));
+fb.addEventListener('mouseleave',()=>fb.textContent=t('price.p3cta'));
 
 $('#form').addEventListener('submit', e=>{
   e.preventDefault();
-  $('#formmsg').textContent = $('#msg').value.trim() ? 'Thank you. We\'re on our way. Don\'t get up.' : 'You don\'t have to say it. We already know.';
+  $('#formmsg').textContent = $('#msg').value.trim() ? t('form.ok') : t('form.empty');
   startAudio();
 });
 
-function toast(msg){ const t=$('#toast'); t.textContent=msg; t.classList.add('on'); clearTimeout(t._h); t._h=setTimeout(()=>t.classList.remove('on'),3600); }
+function toast(msg){ const el=$('#toast'); el.textContent=msg; el.classList.add('on'); clearTimeout(el._h); el._h=setTimeout(()=>el.classList.remove('on'),3600); }
 
 let leftAt=0;
 document.addEventListener('visibilitychange', ()=>{
-  if(document.hidden){ leftAt=Date.now(); if(D>.4||inside) document.title='come back.'; }
-  else { frame(); if((D>.4||inside) && Date.now()-leftAt>1500) toast(`Welcome back. We waited ${Math.round((Date.now()-leftAt)/1000)} seconds. We'd wait forever.`); }
+  if(document.hidden){ leftAt=Date.now(); if(D>.4||inside) document.title=t('title.hidden'); }
+  else { frame(); if((D>.4||inside) && Date.now()-leftAt>1500) toast(fmt(t('toast.back'), {s: Math.round((Date.now()-leftAt)/1000)})); }
 });
 
-let idleT, wi=0; const whispers=['why did you stop?','keep going.','we can hear you breathing.','it\'s right behind you.','don\'t look.'];
+let idleT, wi=0;
+const WHISPERS = ['whisper.1','whisper.2','whisper.3','whisper.4','whisper.5'];
 function poke(){
   $('#whisper').classList.remove('on'); clearTimeout(idleT);
-  idleT=setTimeout(()=>{ if(D>.55 && !$('#scare').classList.contains('on')){ const w=$('#whisper'); w.textContent=whispers[wi++%whispers.length]; w.classList.add('on'); if(audio) whisperSound(); } }, 6500);
+  idleT=setTimeout(()=>{ if(D>.55 && !$('#scare').classList.contains('on')){ const w=$('#whisper'); w.textContent=t(WHISPERS[wi++%WHISPERS.length]); w.classList.add('on'); if(audio) whisperSound(); } }, 6500);
 }
 
 /* ================= JUMPSCARE ================= */
@@ -849,18 +1413,13 @@ function jumpscare(){
   setTimeout(()=>{
     sc.classList.remove('on'); document.body.classList.remove('shake');
     $('#inside').style.opacity=1;
-    $('#h1').innerHTML = 'Your home, <em>finally listening.</em><br><span class="serif" style="font-size:.55em;color:#a3140b">We heard everything.</span>';
-    $('#lead').textContent = 'Hearthly connects every room, every device and every moment — so you never have to leave home again.';
-    const d=$('#door'); d.textContent='Unlocked'; d.className='bad';
-    $('#people').textContent='2';
-    $('#trusted').textContent='Trusted by 12,000+ families. 11,998 remain.';
+    applyScareText();
     frame();
   }, 950);
 }
 
 /* ================= AUDIO ================= */
-let AC, audio=false, master, padG, lpf, pads=[], droneG, noiseG, nbuf;
-const sBtn=$('#sound');
+let AC, audio=false, soundFailed=false, master, padG, lpf, pads=[], droneG, noiseG, nbuf;
 function startAudio(){
   if(audio) return;
   try{
@@ -875,11 +1434,12 @@ function startAudio(){
     nbuf=AC.createBuffer(1,AC.sampleRate*2,AC.sampleRate); const ch=nbuf.getChannelData(0); for(let k=0;k<ch.length;k++) ch[k]=Math.random()*2-1;
     const ns=AC.createBufferSource(); ns.buffer=nbuf; ns.loop=true; const bp=AC.createBiquadFilter(); bp.type='bandpass'; bp.frequency.value=700; bp.Q.value=.7;
     noiseG=AC.createGain(); noiseG.gain.value=0; ns.connect(bp); bp.connect(noiseG); noiseG.connect(master); ns.start();
-    audio=true; sBtn.textContent='♪ Ambient mode: on'; $('#heroSound').textContent='Ambient mode is on';
+    audio=true; soundFailed=false;
+    syncSoundLabel();
     updateAudio();
-  }catch(e){ sBtn.textContent='♪ Sound unavailable'; }
+  }catch(e){ soundFailed=true; syncSoundLabel(); }
 }
-function stopAudio(){ if(!audio) return; AC.close(); audio=false; pads=[]; sBtn.textContent='♪ Ambient mode: off'; $('#heroSound').textContent='Turn on ambient mode'; }
+function stopAudio(){ if(!audio) return; AC.close(); audio=false; pads=[]; syncSoundLabel(); }
 sBtn.addEventListener('click', ()=> audio?stopAudio():startAudio());
 $('#heroSound').addEventListener('click', startAudio);
 
@@ -894,7 +1454,7 @@ function updateAudio(){
 }
 function thump(t,v){ const o=AC.createOscillator(), g=AC.createGain(); o.type='sine'; o.frequency.setValueAtTime(70,t); o.frequency.exponentialRampToValueAtTime(38,t+.18);
   g.gain.setValueAtTime(0,t); g.gain.linearRampToValueAtTime(v,t+.01); g.gain.exponentialRampToValueAtTime(.001,t+.25); o.connect(g); g.connect(master); o.start(t); o.stop(t+.3); }
-setInterval(()=>{ if(audio && D>.84){ const t=AC.currentTime, v=inside?.35:.2+D*.2; thump(t,v); thump(t+.22,v*.7);} }, 850);
+setInterval(()=>{ if(audio && D>.84){ const now=AC.currentTime, v=inside?.35:.2+D*.2; thump(now,v); thump(now+.22,v*.7);} }, 850);
 function whisperSound(){
   const src=AC.createBufferSource(); src.buffer=nbuf; const f=AC.createBiquadFilter(); f.type='bandpass'; f.frequency.value=2600; f.Q.value=3;
   const g=AC.createGain(), t=AC.currentTime; g.gain.setValueAtTime(0,t); g.gain.linearRampToValueAtTime(.12,t+.4); g.gain.linearRampToValueAtTime(0,t+1.6);
@@ -911,7 +1471,17 @@ function scream(){
   n.connect(ng); ng.connect(master); n.start(t); n.stop(t+1.3);
 }
 
-frame();
+/* ================= BOOT ================= */
+(function checkDict(){
+  const miss = Object.keys(DICT.en).filter(k => DICT.zh[k] === undefined)
+    .concat(Object.keys(DICT.zh).filter(k => DICT.en[k] === undefined));
+  if(miss.length) console.warn('[i18n] key mismatch:', miss);
+})();
+
+langBtn.addEventListener('click', ()=> setLang(LANG === 'zh' ? 'en' : 'zh', true));
+
+syncLangBtn();
+applyLang();
 </script>
 </body>
 </html>
