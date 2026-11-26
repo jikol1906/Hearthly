@@ -859,7 +859,12 @@ const DICT = {
     'scare.h1': `Your home, <em>finally listening.</em><br><span class="serif" style="font-size:.55em;color:#a3140b">We heard everything.</span>`,
     'scare.lead': `Hearthly connects every room, every device and every moment — so you never have to leave home again.`,
     'scare.door': `Unlocked`,
-    'scare.trusted': `Trusted by 12,000+ families. 11,998 remain.`
+    'scare.trusted': `Trusted by 12,000+ families. 11,998 remain.`,
+    'console.boot': `hearthly-hub 3.0.14 — boot ok`,
+    'console.devices': `devices online: 14`,
+    'console.presence1': `presence: room with the screen ... 1 occupant`,
+    'console.presence2': `presence: occupants detected: 2`,
+    'console.peek': `we see you.`,
   },
 
   zh: {
@@ -1084,7 +1089,12 @@ const DICT = {
     'scare.h1': `你的家，<em>终于开始倾听了。</em><br><span class="serif" style="font-size:.55em;color:#a3140b">我们什么都听见了。</span>`,
     'scare.lead': `Hearthly 连接每一个房间、每一台设备、每一个瞬间——从此你再也不必离开家。`,
     'scare.door': `未上锁`,
-    'scare.trusted': `超过 12,000 个家庭的信赖之选。还剩 11,998 个。`
+    'scare.trusted': `超过 12,000 个家庭的信赖之选。还剩 11,998 个。`,
+    'console.boot': `hearthly-hub 3.0.14 — 启动正常`,
+    'console.devices': `在线设备：14`,
+    'console.presence1': `presence：有屏幕的那个房间 ... 1 名居住者`,
+    'console.presence2': `presence：检测到居住者：2`,
+    'console.peek': `我们看到你了。`,
   }
 };
 
@@ -1243,6 +1253,7 @@ function applyLang(){
   refreshDynamic();
   updateCam();
   frame();
+  consoleEgg();
 }
 
 function setLang(l, persist){
@@ -1482,6 +1493,21 @@ langBtn.addEventListener('click', ()=> setLang(LANG === 'zh' ? 'en' : 'zh', true
 
 syncLangBtn();
 applyLang();
+
+/* Console easter egg - for whoever opens devtools. It ends with the truth. */
+function consoleEgg(){
+  console.clear()
+  const dim = 'font:600 13px ui-monospace, monospace;color:#8a8078';
+  const red = 'font:600 13px ui-monospace, monospace;color:#a3140b';
+  console.log('%c' + t('console.boot'), dim);
+  console.log('%c' + t('console.devices'), dim);
+  console.log('%c' + t('console.presence1'), dim);
+  console.log('%c' + t('console.presence2'), red);
+  console.log('%c' + t('console.peek'), red);
+}
+consoleEgg();
 </script>
 </body>
 </html>
+<!-- The visitor already left. You're still reading. -->
+<!-- ...nothing is waiting at the bottom of this file. -->
